@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+```markdown
+# AI Interview System
 
-## Getting Started
+音声・テキストで対話できるAI面接システム。
+3Dアバターが面接官として質問し、候補者を評価します。
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🎤 音声入力（Whisper API）
+- 🔊 音声出力（OpenAI TTS）
+- 💬 AI対話（Claude 3 Haiku）
+- 👤 3Dアバター（Ready Player Me）
+- 📊 5項目評価システム
+
+## Tech Stack
+
+**Frontend**
+- Next.js 15.5.4
+- React 18.2.0
+- TypeScript
+- Tailwind CSS
+- Three.js
+- Socket.IO Client
+
+**Backend**
+- NestJS 10.x
+- TypeScript
+- Socket.IO
+- Anthropic SDK（Claude 3 Haiku）
+- OpenAI SDK（Whisper, TTS）
+
+## Architecture
+
+```
+Browser (Next.js)
+    ↓ WebSocket
+Backend (NestJS)
+    ↓ API
+Claude Haiku / Whisper / TTS
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js v22.14.0
+- OpenAI API Key
+- Anthropic API Key
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+git clone [your-repo-url]
+cd ai-interview-system
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Setup environment variables
 
-## Deploy on Vercel
+Create `backend/.env`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+OPENAI_API_KEY=your_openai_key
+ANTHROPIC_API_KEY=your_anthropic_key
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Start backend
+
+```bash
+cd backend
+npm install
+npm run start
+# Runs on http://localhost:3001
+```
+
+4. Start frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+# Runs on http://localhost:3000
+```
+
+## Project Structure
+
+```
+ai-interview-system/
+├── backend/              # NestJS backend
+│   ├── src/
+│   │   ├── main.ts
+│   │   └── audio/
+│   │       ├── audio.gateway.ts      # WebSocket
+│   │       ├── chat.service.ts       # Claude integration
+│   │       └── evaluation.service.ts # Evaluation logic
+│   └── temp/             # Temporary audio files
+│
+└── frontend/             # Next.js frontend
+    └── src/
+        └── app/
+            ├── page.tsx              # Main UI
+            └── components/
+                └── AvatarView.tsx    # 3D Avatar
+```
+
+## How It Works
+
+1. User speaks → Microphone records audio
+2. Audio → Whisper API → Text transcription
+3. Text → Claude API → AI response
+4. AI response → TTS API → Audio
+5. Audio → Auto-plays in browser
+
+## License
+
+MIT
+```
